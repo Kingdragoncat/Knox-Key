@@ -62,7 +62,6 @@ kiutils open "Knox Key Kicad.kicad_pro"
 - Update design renders if layout significantly changes
 - Keep BOM.csv synchronized with project
 - Update README.md for major changes
-- Update notes to DESIGN-UPDATES.md for migration items
 
 ## Commit Guidelines
 

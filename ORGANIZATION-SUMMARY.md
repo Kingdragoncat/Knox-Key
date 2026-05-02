@@ -81,7 +81,6 @@ design-images/PCB/Top.png
 # Renamed directories & files:
 manufacturing/ (from manufacturing-kryptonite/)
 design-images/ (from img-kryptonite/)
-DESIGN-UPDATES.md (from README-kryptonite-update.md)
 manufacturing/component-positions.csv (from kryptonite-pos.csv)
 manufacturing/gerbers/knox-key-*.gbr (from kryptonite-*.gbr)
 ```
@@ -151,7 +150,7 @@ Knox Key Kicad/
 │   └── ibom.html
 ├── backup-*/                               # Historical backups
 ├── BOM_suggested.csv                       # Suggested BOM
-└── DESIGN-UPDATES.md                       # Design updates & migration guide
+└── LICENSE                                 # Project license
 
 IGNORED (won't be committed):
 ├── *.kicad_prl                           # User settings

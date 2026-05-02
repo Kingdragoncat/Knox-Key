@@ -46,7 +46,7 @@ Knox Key Kicad/
 ├── .gitignore                    # Git ignore rules
 ├── README.md                     # This file
 ├── BOM_suggested.csv             # Cleaned BOM with recommendations
-└── DESIGN-UPDATES.md             # Detailed design updates & migration guide
+└── LICENSE                       # Project license (GPLv3)
 
 ```
 
@@ -79,7 +79,7 @@ Knox Key Kicad/
 ## 📊 Design Information
 
 ### Components
-- **Microcontroller**: STM32F072 (or STM32G0 series - see upgrade guide)
+- **Microcontroller**: STM32F072
 - **Security Chip**: ATECC608B (Microchip authentication module)
 - **USB Interface**: USB Type-C connector
 - **Power**: 5V USB-powered
@@ -92,11 +92,7 @@ Knox Key Kicad/
 - **Status**: ✅ Routed, ready for manufacturing
 
 ### Design Verification
-See [DESIGN-UPDATES.md](DESIGN-UPDATES.md) for:
-- Complete design checklist
-- MCU options and considerations
-- Optional enhancements (RGB LED, etc.)
-- Design rule compliance verification
+Run ERC and DRC before manufacturing and releases.
 
 ## 🏭 Manufacturing & Assembly
 
@@ -158,10 +154,7 @@ All manufacturing files are prepared and ready for JLCPCB:
 - Verify against KiCad's standard library before production
 
 ### MCU Options
-The design supports multiple STM32 variants. See [DESIGN-UPDATES.md](DESIGN-UPDATES.md) for:
-- STM32F072 current implementation
-- STM32G0 series upgrade path
-- Firmware compatibility notes
+The current design targets the STM32F072, with firmware kept lean and purpose-built.
 
 ### Performance & Security Considerations
 - ATECC608B provides hardware-level cryptographic acceleration
@@ -181,20 +174,9 @@ The design supports multiple STM32 variants. See [DESIGN-UPDATES.md](DESIGN-UPDA
 - **JLCPCB Design Rules**: https://jlcpcb.com/help/article/PCB-Manufacturing-Capabilities-and-Limitations
 - **USB Type-C Specification**: https://www.usb.org/
 
-## 📋 Checklist Before Pushing
-
-- [x] .gitignore configured for KiCad
-- [x] README documentation complete
-- [x] Manufacturing files prepared (gerbers, BOM, CPL)
-- [x] Design images/renders in design-images/
-- [x] Project structure organized and clean
-- [ ] ERC & DRC verification passed
-- [ ] JLCPCB manufacturing files tested
-- [ ] Commit messages clear and descriptive
-
 ## 📄 License
 
-[Add your license here - e.g., MIT, Apache 2.0, or specific open hardware license]
+This project is licensed under the GNU General Public License v3.0. See LICENSE for details.
 
 ## 👥 Contributing
 
