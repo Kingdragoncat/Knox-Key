@@ -1,0 +1,57 @@
+# KiCad Build Artifacts & Cache
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.kicad_pro-bak
+fp-info-cache
+*.bak
+*.kicad_sch.bak
+
+# KiCad Lock & Session Files (user-specific, temporary)
+*.kicad_pcb.lck
+*.kicad_sch.lck
+*.kicad_pro.lck
+*.lck
+
+# KiCad User-specific settings (do not commit)
+*.kicad_prl
+
+# Auto-generated cache files
+*-cache.lib
+*.bom
+*.cmp
+*.kicad_pcb~
+*.kicad_sch~
+
+# OS & Editor artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-*
+
+# Python/KICAD Plugin Cache
+__pycache__/
+*.pyc
+.python-version
+*.egg-info/
+dist/
+build/
+
+# Local environment
+.env
+.env.local
+node_modules/
+
+# Backup archives (comment out if version control is needed)
+# Knox Key Kicad-backups/*.zip
+
+# Temporary files
+*.tmp
+*.log
+
+# Optional: Comment out if you want manufacturing files in git
+# manufacturing-*/
+# *.pdf
