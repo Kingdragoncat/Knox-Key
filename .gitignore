@@ -46,7 +46,13 @@ build/
 node_modules/
 
 # Backup archives (comment out if version control is needed)
-# Knox Key Kicad-backups/*.zip
+Knox Key Kicad-backups/*.zip
+backup-*/
+_restore_tmp/
+#auto_saved_files#/
+_autosave-*
+~*.lck
+1054440001.zip
 
 # Temporary files
 *.tmp
