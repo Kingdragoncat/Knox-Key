@@ -131,7 +131,7 @@ All manufacturing files are prepared and ready for JLCPCB:
 
 ## Firmware & FIDO2 Support
 
-The `firmware/lionkey/` directory contains a full FIDO2 (CTAP2) standard authenticator firmware.
+The `firmware/knoxkey/` directory contains a full FIDO2 (CTAP2) standard authenticator firmware.
 
 ### Firmware Features
 - **Hardware-Backed Entropy**: All secure random numbers are queried natively from the ATECC608B TRNG via I2C, meeting FIPS compliance standards.
@@ -144,7 +144,7 @@ The `firmware/lionkey/` directory contains a full FIDO2 (CTAP2) standard authent
 1. Install CMake and the `arm-none-eabi-gcc` toolchain.
 2. Build the STM32L433 target:
    ```bash
-   cd firmware/lionkey
+   cd firmware/knoxkey
    cmake -B build/stm32l433-release -S . --preset default -DBUILD_TARGET=stm32l433
    cmake --build build/stm32l433-release -j 8
    ```
