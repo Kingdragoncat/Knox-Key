@@ -1,0 +1,15 @@
+[submodule "lib/tinyusb"]
+	path = lib/tinyusb
+	url = https://github.com/hathach/tinyusb.git
+[submodule "lib/tinycbor"]
+	path = lib/tinycbor
+	url = https://github.com/pokusew/tinycbor.git
+[submodule "crypto/micro-ecc"]
+	path = crypto/micro-ecc
+	url = https://github.com/pokusew/micro-ecc.git
+[submodule "crypto/tiny-AES-c"]
+	path = crypto/tiny-AES-c
+	url = https://github.com/pokusew/tiny-AES-c.git
+[submodule "crypto/tinymt"]
+	path = crypto/tinymt
+	url = https://github.com/MersenneTwister-Lab/TinyMT.git

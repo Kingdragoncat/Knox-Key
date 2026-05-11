@@ -1,0 +1,65 @@
+### GENERAL
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.supported
+
+# VS Code
+# note: some configruations might be worth included in version control
+.vscode/
+
+# JetBrains IDEs
+# see https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+**/.idea/usage.statistics.xml
+**/.idea/shelf/
+**/.idea/httpRequests/
+**/.idea/dataSources/
+**/.idea/dataSources.local.xml
+
+# common files
+*.log
+
+# local-only files (may be useful during development)
+*.local.*
+*.local
+
+
+### PROJECT
+
+# CMake build outputs
+/cmake-build-*
+/build/
+/build-*/
+
+# a temporary log dir used in CI
+/log/
+
+## Node.js project in the tools/scripts/ subdirectory
+
+# dependencies
+/tools/scripts/node_modules/
+
+## Docusaurus Node.js project in the docs/ subdirectory
+
+# dependencies
+/docs/node_modules/
+
+# build
+/docs/build/
+
+# CI
+/docs/temp/
+
+# generated
+/docs/.docusaurus/
+/docs/.cache-loader/
+
+# Wrangler (Cloudflare Workers)
+/docs/.wrangler/
+/docs/dist/

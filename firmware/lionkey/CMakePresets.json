@@ -1,0 +1,282 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "default",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}"
+        },
+        {
+            "name": "host",
+            "inherits": "default",
+            "hidden": true,
+            "description": "Configure preset for the host builds",
+            "cacheVariables": {
+                "BUILD_TARGET": "host"
+            }
+        },
+        {
+            "name": "stm32h533",
+            "inherits": "default",
+            "hidden": true,
+            "description": "Configure preset for the stm32h533 embedded builds",
+            "toolchainFile": "${sourceDir}/targets/stm32h533/cmake/gcc-arm-none-eabi.cmake",
+            "cacheVariables": {
+                "BUILD_TARGET": "stm32h533"
+            }
+        },
+        {
+            "name": "host-debug",
+            "inherits": "host",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "SANITIZERS": true
+            }
+        },
+        {
+            "name": "host-debug-coverage",
+            "inherits": "host-debug",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "--coverage",
+                "CMAKE_C_FLAGS": "--coverage"
+            }
+        },
+        {
+            "name": "stm32h533-debug",
+            "inherits": "stm32h533",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "stm32h533-debug-info-logs",
+            "inherits": "stm32h533-debug",
+            "cacheVariables": {
+                "LIONKEY_DEBUG_LEVEL": "2"
+            }
+        },
+        {
+            "name": "stm32h533-release",
+            "inherits": "stm32h533",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "LIONKEY_DEBUG_LEVEL": "2",
+                "LIONKEY_DEVELOPMENT_OVERRIDE": "OFF"
+            }
+        },
+        {
+            "name": "stm32f072",
+            "inherits": "default",
+            "hidden": true,
+            "description": "Configure preset for the stm32f072 embedded builds (Knox Key)",
+            "toolchainFile": "${sourceDir}/targets/stm32f072/cmake/gcc-arm-none-eabi.cmake",
+            "cacheVariables": {
+                "BUILD_TARGET": "stm32l433"
+            }
+        },
+        {
+            "name": "stm32f072-debug",
+            "inherits": "stm32f072",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "BUILD_TARGET": "stm32l433"
+            }
+        },
+        {
+            "name": "stm32f072-release",
+            "inherits": "stm32f072",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "LIONKEY_DEBUG_LEVEL": "1",
+                "LIONKEY_DEVELOPMENT_OVERRIDE": "OFF",
+                "BUILD_TARGET": "stm32l433"
+            }
+        },
+        {
+            "name": "stm32l433-release",
+            "inherits": "stm32l433",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "LIONKEY_DEBUG_LEVEL": "1",
+                "LIONKEY_DEVELOPMENT_OVERRIDE": "OFF",
+                "BUILD_TARGET": "stm32l433"
+            }
+        },
+        {
+            "name": "stm32l433-debug",
+            "inherits": "stm32l433",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "BUILD_TARGET": "stm32l433"
+            }
+        },
+        {
+            "name": "stm32l433",
+            "inherits": "default",
+            "hidden": true,
+            "description": "Configure preset for the stm32l433 embedded builds (Knox Key)",
+            "toolchainFile": "${sourceDir}/targets/stm32l433/cmake/gcc-arm-none-eabi.cmake",
+            "cacheVariables": {
+                "BUILD_TARGET": "stm32l433"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "host-debug",
+            "configurePreset": "host-debug"
+        },
+        {
+            "name": "host-debug-coverage",
+            "configurePreset": "host-debug-coverage"
+        },
+        {
+            "name": "stm32h533-debug",
+            "configurePreset": "stm32h533-debug"
+        },
+        {
+            "name": "stm32h533-debug-info-logs",
+            "configurePreset": "stm32h533-debug-info-logs"
+        },
+        {
+            "name": "stm32h533-release",
+            "configurePreset": "stm32h533-release"
+        },
+        {
+            "name": "stm32f072-debug",
+            "configurePreset": "stm32f072-debug"
+        },
+        {
+            "name": "stm32f072-release",
+            "configurePreset": "stm32f072-release"
+        },
+        {
+            "name": "stm32l433-debug",
+            "configurePreset": "stm32l433"
+        },
+        {
+            "name": "stm32l433-release",
+            "configurePreset": "stm32l433"
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "host-debug",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "host-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "host-debug"
+                }
+            ]
+        },
+        {
+            "name": "host-debug-coverage",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "host-debug-coverage"
+                },
+                {
+                    "type": "build",
+                    "name": "host-debug-coverage"
+                }
+            ]
+        },
+        {
+            "name": "stm32h533-debug",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "stm32h533-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "stm32h533-debug"
+                }
+            ]
+        },
+        {
+            "name": "stm32h533-debug-info-logs",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "stm32h533-debug-info-logs"
+                },
+                {
+                    "type": "build",
+                    "name": "stm32h533-debug-info-logs"
+                }
+            ]
+        },
+        {
+            "name": "stm32h533-release",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "stm32h533-release"
+                },
+                {
+                    "type": "build",
+                    "name": "stm32h533-release"
+                }
+            ]
+        },
+        {
+            "name": "stm32f072-debug",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "stm32l433"
+                },
+                {
+                    "type": "build",
+                    "name": "stm32l433-debug"
+                }
+            ]
+        },
+        {
+            "name": "stm32f072-release",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "stm32l433"
+                },
+                {
+                    "type": "build",
+                    "name": "stm32l433-release"
+                }
+            ]
+        },
+        {
+            "name": "stm32l433-debug",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "stm32l433"
+                },
+                {
+                    "type": "build",
+                    "name": "stm32l433-debug"
+                }
+            ]
+        },
+        {
+            "name": "stm32l433-release",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "stm32l433"
+                },
+                {
+                    "type": "build",
+                    "name": "stm32l433-release"
+                }
+            ]
+        }
+    ]
+}
