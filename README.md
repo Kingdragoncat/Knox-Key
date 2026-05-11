@@ -2,7 +2,7 @@
 
 A high-security USB Type-C authentication key design built with KiCad 8, featuring the ATECC608B cryptographic authentication chip and secure firmware validation mechanisms.
 
-## 📋 Project Overview
+## Project Overview
 
 **Knox Key** is an open-source, security-focused hardware authentication solution designed for:
 - Secure device authentication
@@ -16,7 +16,7 @@ A high-security USB Type-C authentication key design built with KiCad 8, featuri
 - **USB Type-C** - Modern connector standard for universal compatibility
 - **JLCPCB Ready** - Fully prepared for SMT assembly
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Knox Key Kicad/
@@ -50,7 +50,7 @@ Knox Key Kicad/
 
 ```
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### Prerequisites
 - **KiCad 8.x** or later ([Download](https://www.kicad.org/download/))
@@ -76,12 +76,14 @@ Knox Key Kicad/
 - **3D View**: Open `Knox Key Kicad.kicad_pcb` in KiCad, then `View > 3D View`
 - **Manufacturing Info**: See `manufacturing/` for complete JLCPCB assembly data
 
-## 📊 Design Information
+## Design Information
 
 ### Components
-- **Microcontroller**: STM32F072
-- **Security Chip**: ATECC608B (Microchip authentication module)
+- **Microcontroller**: STM32L433CBTx (Ported from F072 for enhanced capability)
+- **Security Chip**: ATECC608B (Microchip authentication module acting as FIPS-compliant TRNG)
 - **USB Interface**: USB Type-C connector
+- **Status Indicators**: RGB LED (Success: Green, Error: Red, Heartbeat: Blue/Yellow)
+- **User Presence**: Tactile Button (Supports Single, Double, and Long clicks)
 - **Power**: 5V USB-powered
 - **Total Components**: 16 (see BOM for details)
 
@@ -89,12 +91,11 @@ Knox Key Kicad/
 - **Layers**: 2-layer PCB
 - **Size**: [Check PCB file for exact dimensions]
 - **Connector**: USB Type-C
-- **Status**: ✅ Routed, ready for manufacturing
 
 ### Design Verification
 Run ERC and DRC before manufacturing and releases.
 
-## 🏭 Manufacturing & Assembly
+## Manufacturing & Assembly
 
 ### JLCPCB Assembly (Ready to Order)
 All manufacturing files are prepared and ready for JLCPCB:
@@ -116,19 +117,19 @@ All manufacturing files are prepared and ready for JLCPCB:
 | `gerbers/` | Fabrication data (10 layers: Cu, mask, paste, silkscreen, edge, drill) |
 | `job.gbrjob` | JLCPCB job metadata |
 
-## 📸 Design Views
+## Design Views
 
-### PCB Renders
-- **3D Front**: `design-images/PCB/3D/front.png`
-- **3D Back**: `design-images/PCB/3D/back.png`
-- **Top View**: `design-images/PCB/Top.png`
-- **Bottom View**: `design-images/PCB/Bottom.png`
+### Board Renderings
+![3D Front](design-images/3D-Front.png)
+<br>
+![3D Back](design-images/3D-Back.png)
 
-### Schematic
-- **PDF**: `design-images/Schematic/schematic.pdf`
-- **PNG**: `design-images/Schematic/Schematic.png`
+### Layout & Schematic
+![PCB Layout](design-images/PCB.png)
+<br>
+![Schematic](design-images/schematic.png)
 
-## 🔄 Workflow
+## Workflow
 
 ### Development
 1. Make changes to `Knox Key Kicad.kicad_sch` (schematic) or `Knox Key Kicad.kicad_pcb` (layout)
@@ -147,7 +148,7 @@ All manufacturing files are prepared and ready for JLCPCB:
 - Keep BOM_suggested.csv synchronized with KiCad project
 - Update this README with any significant changes
 
-## 📝 Notes & Customization
+## Notes & Customization
 
 ### Custom Footprint
 - `type-c.pretty/TYPE-C-31-G-01.kicad_mod` - USB Type-C footprint
@@ -161,12 +162,12 @@ The current design targets the STM32F072, with firmware kept lean and purpose-bu
 - USB interface supports full-speed (12 Mbps) communication
 - Power consumption: Optimized for battery-free USB operation
 
-## 🔐 Security Notes
+## Security Notes
 - Custom authentication implementation - review security audit before production deployment
 - ATECC608B should be provisioned with secure keys (not included in this design)
 - USB firmware must implement proper authentication protocol
 
-## 📚 Additional Resources
+## Additional Resources
 
 - **KiCad Documentation**: https://docs.kicad.org/
 - **ATECC608B Datasheet**: Microchip AT608A-SHNP
@@ -174,11 +175,11 @@ The current design targets the STM32F072, with firmware kept lean and purpose-bu
 - **JLCPCB Design Rules**: https://jlcpcb.com/help/article/PCB-Manufacturing-Capabilities-and-Limitations
 - **USB Type-C Specification**: https://www.usb.org/
 
-## 📄 License
+## License
 
 This project is licensed under the GNU General Public License v3.0. See LICENSE for details.
 
-## 👥 Contributing
+## Contributing
 
 Contributions welcome! Please:
 1. Fork the repository
@@ -187,7 +188,7 @@ Contributions welcome! Please:
 4. Push to branch (`git push origin feature/your-feature`)
 5. Open a Pull Request
 
-## 📧 Support & Issues
+## Support & Issues
 
 For questions, bugs, or feature requests, please open an issue on GitHub.
 
@@ -195,4 +196,3 @@ For questions, bugs, or feature requests, please open an issue on GitHub.
 
 **Last Updated**: May 2026  
 **KiCad Version**: 8.x  
-**Status**: ✅ Ready for manufacturing
