@@ -46,6 +46,7 @@ Knox Key Kicad/
 ├── .gitignore                    # Git ignore rules
 ├── README.md                     # This file
 ├── BOM_suggested.csv             # Cleaned BOM with recommendations
+├── firmware/                     # FIDO2 hardware authenticator firmware (knoxkey)
 └── LICENSE                       # Project license (GPLv3)
 
 ```
