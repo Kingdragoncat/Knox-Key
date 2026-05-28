@@ -61,3 +61,14 @@ _autosave-*
 # Optional: Comment out if you want manufacturing files in git
 # manufacturing-*/
 # *.pdf
+
+# Freerouting temporary design files
+*freerouting.dsn
+
+# Fabrication toolkit options
+fabrication-toolkit-options.json
+
+# Production artifacts and design research
+production/
+manufacturing/parts_research.csv
+
