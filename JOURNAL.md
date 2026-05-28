@@ -1,7 +1,6 @@
 # Knox Key
 
 **Project:** Knox Key FIDO2 Security Key  
-**Start Date:** March 10, 2026, 5:40:58 PM  
 
 ---
 
