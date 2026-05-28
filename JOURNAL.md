@@ -6,10 +6,6 @@
 
 ---
 
-## Project Overview
-
-[Add brief description of what Knox Key is and what you're building]
-
 
 ## Work Log
 
