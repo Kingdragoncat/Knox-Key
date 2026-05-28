@@ -1,6 +1,5 @@
 # Knox Key
-
-** NOT Project:** Knox Key FIDO2 Security Key  
+FIDO2 Security Key  
 
 ---
 
