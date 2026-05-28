@@ -1,8 +1,3 @@
-# Knox Key
-FIDO2 Security Key  
-
----
-
 
 ## Work Log
 
