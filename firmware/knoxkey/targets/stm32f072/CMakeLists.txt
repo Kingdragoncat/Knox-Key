@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
 
-# Setup compiler settings
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
@@ -9,7 +8,6 @@ project(knoxkey_stm32f072 C ASM)
 
 message("Build type: " ${CMAKE_BUILD_TYPE})
 
-# Create an executable object type
 add_executable(${PROJECT_NAME})
 
 # Add STM32CubeMX generated sources

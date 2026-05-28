@@ -8,10 +8,6 @@
 #include <assert.h>
 #include <string.h>
 
-/*--------------------------------------------------------------------+
- * Device Descriptor
- *--------------------------------------------------------------------*/
-
 static const tusb_desc_device_t device_descriptor = {
 	.bLength            = sizeof(tusb_desc_device_t),
 	.bDescriptorType    = TUSB_DESC_DEVICE,
@@ -21,8 +17,8 @@ static const tusb_desc_device_t device_descriptor = {
 	.bDeviceProtocol    = 0x00,
 	.bMaxPacketSize0    = CFG_TUD_ENDPOINT0_SIZE,
 
-	.idVendor  = 0x1209, /* pid.codes test VID */
-	.idProduct = 0x0001, /* TODO: get a real PID from pid.codes */
+	.idVendor  = 0x1209,
+	.idProduct = 0x0001,
 	.bcdDevice = 0x0100,
 
 	.iManufacturer = 0x01,

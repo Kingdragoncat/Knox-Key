@@ -305,69 +305,32 @@ ctaphid_process_packet_result_t ctaphid_process_packet(
 		}
 	}
 
-	// See 11.2.5. Arbitration
-
-	if (is_initialization_packet(packet)) {
-
-		// special handling for 11.2.9.1.5. CTAPHID_CANCEL (0x11)
 		if (packet->pkt.init.cmd == CTAPHID_CANCEL) {
-
-			// validate the payload length (for CTAPHID_CANCEL it must be 0)
 			if (lion_ntohs(packet->pkt.init.bcnt) != 0) {
 				*error_code = CTAP1_ERR_INVALID_LENGTH;
 				return CTAPHID_RESULT_ERROR;
 			}
-
-			// cancel if there is an ongoing CTAPHID_CBOR with the matching channel id
 			if (packet->cid == buffer->cid && is_complete_message_cmd(buffer, CTAPHID_CBOR)) {
 				buffer->cancel = true;
 				return CTAPHID_RESULT_CANCEL;
 			}
-
-			// A CTAPHID_CANCEL received while no CTAPHID_CBOR request is being processed,
-			// or on a non-active CID SHALL be ignored by the authenticator.
 			debug_log(red("  ignored CTAPHID_CANCEL") nl);
 			return CTAPHID_RESULT_IGNORED;
-
 		}
 
-		// special handling for 11.2.9.1.3. CTAPHID_INIT (0x06)
 		if (packet->pkt.init.cmd == CTAPHID_INIT) {
-
-			// validate the payload length (for CTAPHID_INIT must be 8)
 			if (lion_ntohs(packet->pkt.init.bcnt) != 8) {
 				*error_code = CTAP1_ERR_INVALID_LENGTH;
 				return CTAPHID_RESULT_ERROR;
 			}
-
-			// If sent on the broadcast CID, it requests the device to allocate
-			// a unique 32-bit channel identifier (CID) that can be used by the
-			// requesting application during its lifetime.
-			// The device then responds with the newly allocated channel in the response,
-			// using the broadcast channel.
 			if (packet->cid == CTAPHID_BROADCAST_CID) {
 				return CTAPHID_RESULT_ALLOCATE_CHANNEL;
 			}
-
-			// If sent on an allocated CID, it synchronizes a channel, discarding the current transaction,
-			// buffers and state as quickly as possible. It will then be ready for a new transaction.
-			// The device then responds with the CID of the channel it received the INIT on, using that channel.
-			// Note that, at this point, we know for sure that the packet cid is valid (allocated)
-			// (thanks to the invalid channel check above).
 			assert(packet->cid != 0 && packet->cid <= state->highest_allocated_cid);
-			// 11.2.5.3. Transaction abort and re-synchronization
-			//   If the device detects an INIT command during a transaction
-			//   that has the same channel id as the active transaction,
-			//   the transaction is aborted (if possible) and all buffered data flushed (if any).
-			// Note that "if possible" translates (in our codebase) to is_incomplete_message(buffer)
-			// because if the message is already complete, it means that it has been completed
-			// in the previous invocation of ctaphid_process_packet() and therefore the CTAP layer
-			// might have already started processing it.
 			if (packet->cid == buffer->cid && is_incomplete_message(buffer)) {
 				reset_buffer(buffer);
 			}
 			return CTAPHID_RESULT_DISCARD_INCOMPLETE_MESSAGE;
-
 		}
 
 		// 1.2.5.1. Transaction atomicity, idle and busy states
