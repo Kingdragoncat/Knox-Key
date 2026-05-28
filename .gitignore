@@ -68,7 +68,6 @@ _autosave-*
 # Fabrication toolkit options
 fabrication-toolkit-options.json
 
-# Production artifacts and design research
-production/
+# Design research (sourcing notes, kept local)
 manufacturing/parts_research.csv
 
