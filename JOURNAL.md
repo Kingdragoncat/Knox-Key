@@ -1,41 +1,132 @@
+---
+title: "Knox Key"
+author: "Kingdragoncat"
+description: "A high-security USB Type-C authentication key design built with KiCad 8, featuring the ATECC608B cryptographic authentication chip and secure firmware validation mechanisms."
+created_at: "2026-03-10"
+---
 
-## Work Log
+# March 10, 2026: Project Initiation & Hardware Security Research
 
-| Minutes | Task | Details |
-|-------:|------|---------|
-| 60 | Research hardware security keys | <details><summary>Click to expand</summary>Searched for good hardware security keys to understand the project goals. Started by looking at different types of security keys - FIDO2, U2F, etc. Watched videos and read articles about how they work and why they're important. Got inspired after doing a speech about security keys to actually build one myself. Looked at YubiKey, Titan keys, and other commercial options to understand features and design patterns.<br><br>Evidence:<br>![LionKey research reference](design-images/15_key_research.png)</details> |
-| 75 | Research Lionkey | <details><summary>Click to expand</summary>Deep dive into [Lionkey](https://lionkey.dev/) - an open source FIDO2 key project. Went through their website and repo, looked at their schematic, PCB layout, and firmware code. This was really helpful to understand what components I'd need and how to structure the project. Took notes on their component choices and design decisions.<br><br>Evidence:<br>![LionKey reference](design-images/10_lionkey_preview.png)</details> |
-| 5 | Started KiCad project | <details><summary>Click to expand</summary>Created a new KiCad project file and set up the basic project structure. Configured project settings and added necessary libraries for components I'd be using.<br><br>Evidence:<br>![Early schematic workspace](design-images/16_start_project.png)</details> |
-| 30 | Researched microcontroller options | <details><summary>Click to expand</summary>Looked at different MCU options that support FIDO2 and USB. Compared STM32F072, STM32L433, and some other options. Checked availability on JLCPCB and pricing. Made notes on memory, peripherals, and power consumption of each option.<br><br>Evidence:<br>![MCU research reference](design-images/11_nucleo_reference.png)</details> |
-| 15 | Selected STM32F072 as main MCU | <details><summary>Click to expand</summary>Decided to go with the STM32F072 based on FIDO2 support, USB device capability, available SRAM for crypto operations, and good availability at JLCPCB. It had enough power for what I needed without being overkill.<br><br>Evidence:<br>![STM32F072 microcontroller](design-images/17_ STM32F072.png)</details> |
-| 30 | Found voltage regulators | <details><summary>Click to expand</summary>Searched JLCPCB for a regulator for the 3.3V rail used by the MCU and support parts. Selected MCP1700T-3302E in SOT-23 for the final design and validated the required input/output capacitor setup from the datasheet.<br><br>Evidence:<br>![MCP1700 selection page](design-images/22_regulator_datasheet.png)</details> |
-| 21 | Selected crypto chip (ATECC608) | <details><summary>Click to expand</summary>Found and selected the ATECC608 cryptographic coprocessor from Microchip. This handles the heavy crypto work for FIDO2 operations like ECDSA signing. Verified it was available and compatible with my MCU choice via I2C interface.<br><br>Evidence:<br>![ATECC608 selection page](design-images/23_atecc608_datasheet.png)</details> |
-| 24 | Picked USB connector and supporting components | <details><summary>Click to expand</summary>Selected a USB Type-C connector and supporting protection/filter parts for the USB data path. Added USBLC6-2SC6 ESD protection and finalized the connector footprint for manufacturing-friendly assembly.<br><br>Evidence:<br>![USB connector & ESD components selection](design-images/24_usb_esd_parts.png)</details> |
-| 30 | Gathered passive components | <details><summary>Click to expand</summary>Created a list of all resistors and capacitors needed for filtering, pull-ups, and decoupling. Chose values from datasheets and selected assembly-friendly footprints. Kept placement single-side for full manufacturing (not hand soldering).<br><br>Evidence:<br>![BOM passives list](design-images/25_passives_list.png)</details> |
-| 3 | Generated BOM via KiCad plugin | <details><summary>Click to expand</summary>Exported the BOM automatically using KiCad's BOM export plugin - quick automated export for part numbers and quantities.<br><br>Evidence:<br>![BOM layout view](design-images/03_bom_layout.png)</details> |
-| 120 | Drew main power supply circuit | <details><summary>Click to expand</summary>Started the schematic by laying out the power supply section - the input stage with decoupling caps, the voltage regulator circuit, output filtering, and power distribution. Made sure to include all the recommended bypass capacitors from the regulator datasheet.<br><br>Evidence:<br>![Power regulator schematic](design-images/06_power_reg.png)</details> |
-| 90 | Drew USB interface and connector pins | <details><summary>Click to expand</summary>Added the USB Type-C connector symbol and connected the signal lines. Set up the USB signal conditioning - series resistors for impedance matching, ferrite bead for filtering, and the proper pull-up configurations for VBUS sensing.<br><br>Evidence:<br>![USB connector and ESD schematic](design-images/05_usb_esd.png)</details> |
-| 60 | Drew MCU connections and decoupling | <details><summary>Click to expand</summary>Placed the STM32F072 symbol and connected all the power pins, decoupling capacitors, bypass caps, and the crystal oscillator. This was frustrating at first but eventually got it looking decent. Made sure all the bypass caps were placed close to their respective power pins.<br><br>Evidence:<br>![Crystal and load caps](design-images/09_crystal_caps.png)</details> |
-| 45 | Added ATECC608 crypto chip circuit | <details><summary>Click to expand</summary>Placed the ATECC608 symbol and connected the I2C bus (SDA/SCL lines), power, and ground. Added pull-up resistors on the I2C bus as required. Made sure this section had its own decoupling cap.<br><br>Evidence:<br>![ATECC608 I2C section](design-images/13_atecc_i2c.png)</details> |
-| 30 | Added debug header and SWD connections | <details><summary>Click to expand</summary>Added a SWD (Serial Wire Debug) connector header for firmware debugging and flashing. Wired up the SWDIO and SWDCK lines from the MCU to this header along with power and ground. This would be crucial for testing.<br><br>Evidence:<br>![SWD in schematic](design-images/08_swd_symbol.png)</details> |
-| 30 | Added status LED circuit | <details><summary>Click to expand</summary>Added an LED indicator circuit tied to MCU GPIO for status feedback while keeping the user presence button circuit in the design. Included the required resistor network and kept routing clear for assembly and debug visibility.<br><br>Evidence:<br>![User presence button schematic](design-images/07_user_button.png)</details> |
-| 15 | Cleaned up schematic layout | <details><summary>Click to expand</summary>Reorganized the schematic to make it more readable - grouped related sections together, straightened up wires, and made sure the sheet looked professional. Did the first pass of checking for obvious issues.<br><br>Evidence:<br>![Clean overall schematic layout](design-images/21_schematic_full.png)</details> |
-| 15 | Ran ERC (Electrical Rules Check) | <details><summary>Click to expand</summary>Ran KiCad's ERC tool to check for electrical rule violations. Fixed a few issues like missing values and unconnected pins. Made sure all components were properly referenced.<br><br>Evidence:<br>![ERC check dialog](design-images/27_erc_check.png)</details> |
-| 240 | PCB component placement and initial routing | <details><summary>Click to expand</summary>This was tedious. Started by placing all components on the PCB trying to minimize form factor. Had to think carefully about where to put things - USB connector on one edge, MCU in the middle, crypto chip nearby for short I2C traces, power supply components grouped together. Then started routing the copper traces, prioritizing USB signal integrity and keeping crypto chip traces away from noise sources. Got most of the critical traces done but knew I'd have to refine this.<br><br>Evidence:<br>![PCB initial component placement](design-images/28_initial_placement.png)</details> |
-| 150 | Routing tight connections and signal integrity | <details><summary>Click to expand</summary>Continued routing, focusing on the tricky parts. Made sure USB differential pairs were routed together with controlled impedance. Tried to keep signal traces away from high-current power traces. Added via stitching where needed. This part honestly sucked - kept having to reroute things when they crossed badly. Did maybe 5 passes of optimization.<br><br>Evidence:<br>![USB pad routing closeup](design-images/02_usb_pads_closeup.png)</details> |
-| 60 | Added ground and power planes | <details><summary>Click to expand</summary>Added copper pours for ground on the board layers to reduce noise and improve signal integrity. Added the 3.3V power distribution routing and verified clearances. These also help with thermal distribution.<br><br>Evidence:<br>![Board routing and plane context](design-images/14_board_routing.png)</details> |
-| 40 | Replaced wired ground with ground splash | <details><summary>Click to expand</summary>Initially routed ground as discrete traces across the board, then learned that a ground pour/splash is better for noise and manufacturing. Removed the wired ground traces and applied a ground splash — cost about 40 minutes of rework.<br><br>Evidence:<br>![PCB ground pour filled](design-images/30_ground_pour_step.png)</details> |
-| 90 | Design Rule Check and violation fixes | <details><summary>Click to expand</summary>Ran DRC to check for spacing violations, trace width issues, and other manufacturing problems. Had to go back and fix several trace width violations and clearance issues. Adjusted a few vias that were too close together. Checked it like 5 times because I kept finding small issues.<br><br>Evidence:<br>![DRC check dialog](design-images/31_drc_dialog.png)</details> |
-| 120 | Attempted metal USB shroud modification | <details><summary>Click to expand</summary>Decided the design needed a more robust USB connector with a metal shroud for durability. Started modifying the schematic and PCB layout to accommodate this. Swapped out the connector type, adjusted the footprint, and tried to reroute the USB signals to match the new connector pinout. About halfway through I realized I was creating way more complexity than necessary and the project got pretty messy.<br><br>Evidence:<br>![Attempted USB shroud footprint](design-images/32_usb_shroud_fail.png)</details> |
-| 60 | Project crashed - reverted to backup | <details><summary>Click to expand</summary>While working on the metal shroud USB connector, KiCad crashed (not sure if it was a memory issue or file corruption). Lost about 30 mins of work. Had to revert to the backup version from earlier. This was frustrating but thankfully I had backups in the _restore_tmp folder.<br><br>Evidence:<br>![Recovered project files in backup](design-images/33_kicad_recovery.png)</details> |
-| 60 | Redid PCB work after revert | <details><summary>Click to expand</summary>After reverting, I had to redo all the PCB modifications I'd made for the metal shroud. Re-ran DRC, fixed the same violations again, and got back to the state I was at before the crash. This was annoying repetitive work.<br><br>Evidence:<br>![Full PCB layout view](design-images/20_pcb_layout.png)</details> |
-| 30 | Decided to keep original USB connector | <details><summary>Click to expand</summary>Realized that the metal shroud was adding unnecessary complexity and manufacturing costs for not much benefit. Decided to stick with the original simple USB Type-C connector design. Removed all the partial changes related to the metal shroud and got back to the clean version.<br><br>Evidence:<br>![Original USB connector routing](design-images/34_original_usb_layout.png)</details> |
-| 30 | Slack fixes & error corrections | <details><summary>Click to expand</summary>Posted design on Hack Club Slack, received feedback (e.g., RGB LED was wired to GND instead of 3.3V). Fixed those wiring errors and small issues based on community feedback. This took about 30 minutes to correct and re-run DRC.<br><br>Evidence:<br>![RGB LED wiring correction](design-images/35_led_wiring_fix.png)</details> |
-| 120 | Generated manufacturing files | <details><summary>Click to expand</summary>Exported Gerber files for all layers (F_Cu, B_Cu, F_Mask, B_Mask, F_Silk, B_Silk, Edge_Cuts, F_Fab). Generated drill files and the CPL (Component Placement List). BOM was exported via KiCad plugin (automated).<br><br>Evidence:<br>![Generated manufacturing files list](design-images/36_manufacturing_files.png)</details> |
-| 30 | Exported 3D model and visual check | <details><summary>Click to expand</summary>Exported a 3D STEP file and rendered a 3D view of the board to visually verify everything looked right. Checked that no components were colliding, traces looked clean, and overall the design was sound. The 3D view helped catch a few small issues I'd missed.<br><br>Evidence:<br>![3D front render view](design-images/19_3d_front.png)</details> |
-| 90 | Set up CMake build system for firmware | <details><summary>Click to expand</summary>Created CMake configuration files to set up the build system for STM32 firmware development. Configured the cross-compiler for ARM Cortex-M0, set up compiler flags, and configured the linker script for the STM32F072. Got the build system compiling a basic hello world successfully.<br><br>Evidence:<br>![CMakeLists.txt setup](design-images/37_cmake_setup.png)</details> |
-| 60 | Configured STM32 USB device stack | <details><summary>Click to expand</summary>Set up the STM32 HAL libraries for USB device operation. Configured USB device mode, set up the endpoint configuration, and defined basic USB descriptors. Got basic USB enumeration working - the device would show up as an unknown USB device on the computer.<br><br>Evidence:<br>![USB device stack descriptors](design-images/38_usb_device_stack.png)</details> |
-| 45 | Started FIDO2 protocol implementation | <details><summary>Click to expand</summary>Began implementing the FIDO2 protocol layer. Started with HID (Human Interface Device) support since FIDO2 typically uses HID for communication. Set up the HID report descriptors and basic command handling framework. Got to the point where I could receive commands from the host.<br><br>Evidence:<br>![FIDO2 HKDF key derivation code](design-images/04_hkdf_code.png)</details> |
-| 30 | Basic command parsing and response | <details><summary>Click to expand</summary>Implemented simple command parsing to extract FIDO2 commands from the USB HID reports. Set up the response mechanism to send results back to the host. Had the framework in place but not all the actual crypto operations yet.<br><br>Evidence:<br>![HID packet parsing code](design-images/40_command_parsing_code.png)</details> |
+I decided to build my own hardware FIDO2 security key. I started by researching how hardware security keys actually work, reading up on FIDO2, U2F standards, and comparing existing commercial devices like YubiKeys and Titan keys. I got inspired after doing a talk on security keys to build one myself.
 
+Next, I looked at open-source FIDO2 key implementations. I did a deep dive into the Lionkey project, analyzing their schematics, component choices, and repository structure. This gave me a good reference model.
 
+With a general design in mind, I initialized the KiCad project and began searching for MCU options. I checked JLCPCB's assembly catalog for parts with USB device stacks and sufficient RAM/Flash for cryptographic operations. I compared STM32F072, STM32L433, and similar models, ultimately choosing the STM32F072 as the main MCU due to its excellent FIDO2 support, cost, and availability.
+
+![Key Research](design-images/15_key_research.png)
+![LionKey reference](design-images/10_lionkey_preview.png)
+![Start Project](design-images/16_start_project.png)
+![Nucleo reference](design-images/11_nucleo_reference.png)
+![STM32F072 MCU](design-images/17_%20STM32F072.png)
+
+Total time spent: 3 hours
+
+# March 12, 2026: Component Selection & BOM Generation
+
+With the MCU selected, I focused on choosing the rest of the bill of materials. I searched JLCPCB for voltage regulators capable of producing a stable 3.3V rail from the 5V USB line, selecting the MCP1700T-3302E in a compact SOT-23 package and noting its recommended decoupling capacitor configuration.
+
+For hardware cryptography, I picked the ATECC608 cryptographic coprocessor from Microchip. This handles ECDSA signatures and other FIDO2 operations securely. I then selected a Type-C connector and the USBLC6-2SC6 ESD protection chip for the data lines. Finally, I gathered passive component packages (resistors, decoupling capacitors, and pull-ups) to ensure everything was single-side mountable for easier assembly, and ran the KiCad BOM export plugin to generate our clean BOM file.
+
+![Regulator selection](design-images/22_regulator_datasheet.png)
+![ATECC608 selection](design-images/23_atecc608_datasheet.png)
+![USB and ESD parts](design-images/24_usb_esd_parts.png)
+![Passives selection](design-images/25_passives_list.png)
+![BOM generation](design-images/03_bom_layout.png)
+
+Total time spent: 2 hours
+
+# March 15, 2026: Drawing Main Power, USB, and MCU Connections
+
+I started drafting the schematic in KiCad, beginning with the main power supply circuits. I placed the voltage regulator, its input/output decoupling capacitors, and set up the power bus.
+
+Next, I wired up the USB Type-C connector. I configured the CC pins with 5.1k pull-down resistors to enable proper host detection, set up series impedance matching resistors on the D+/D- lines, and integrated the ESD protection chip. Finally, I added the STM32F072 microcontroller, wiring up its power pins, crystal oscillator, and local decoupling caps, making sure they were grouped logically near the MCU pins.
+
+![Power schematic](design-images/06_power_reg.png)
+![USB ESD schematic](design-images/05_usb_esd.png)
+![Crystal oscillator schematic](design-images/09_crystal_caps.png)
+
+Total time spent: 4.5 hours
+
+# March 18, 2026: Crypto Chip integration, Debug Ports, and ERC Checks
+
+I completed the remaining parts of the schematic. First, I placed the ATECC608 crypto coprocessor and connected its I2C bus (SDA and SCL lines) directly to the MCU, including pull-up resistors and a dedicated decoupling capacitor.
+
+To make testing possible, I added an SWD debug header, connecting the SWDIO and SWCLK lines. I also added a status indicator RGB LED with appropriate series current-limiting resistors, as well as a tactile button for user presence detection. Once the design was fully wired, I cleaned up the layout, routed sheet symbols, and ran the Electrical Rules Checker (ERC), correcting a couple of missing pin connections.
+
+![ATECC608 I2C schematic](design-images/13_atecc_i2c.png)
+![SWD port schematic](design-images/08_swd_symbol.png)
+![User button and LED schematic](design-images/07_user_button.png)
+![Full schematic](design-images/21_schematic_full.png)
+![ERC check report](design-images/27_erc_check.png)
+
+Total time spent: 2.25 hours
+
+# March 22, 2026: PCB Placement & Critical Trace Routing
+
+With a clean schematic, I imported the netlist into the PCB Editor. I spent a long time arranging the components to minimize the board's footprint, placing the USB Type-C connector on the edge, the MCU in the center, and the crypto chip and passives in compact clusters.
+
+Once the layout was solid, I routed the copper traces. I prioritized the critical USB differential pair, ensuring the D+ and D- lines were routed with matched lengths and controlled impedance. I kept these high-speed lines away from noisier components and routing paths, making multiple optimization passes to keep trace lengths short.
+
+![PCB placement](design-images/28_initial_placement.png)
+![USB trace routing](design-images/02_usb_pads_closeup.png)
+
+Total time spent: 6.5 hours
+
+# March 25, 2026: Ground Pouring & Design Rule Checks
+
+I worked on improving noise immunity and power distribution. First, I added copper ground planes to the top and bottom layers of the board, along with 3.3V power rails to distribute current cleanly. 
+
+To improve performance, I replaced my original discrete wired ground connections with a unified ground pour/splash. Removing the old ground traces and stitching the planes together with vias took about 40 minutes. Finally, I ran the Design Rules Checker (DRC), correcting a few spacing violations and narrow trace segments.
+
+![Board trace views](design-images/14_board_routing.png)
+![Ground pour](design-images/30_ground_pour_step.png)
+![DRC check report](design-images/31_drc_dialog.png)
+
+Total time spent: 3.2 hours
+
+# March 28, 2026: Modifying USB Connector and Crash Recovery
+
+I attempted to modify the USB Type-C connector to a more robust version with a metal shell for extra durability. This required changing the schematic symbol, switching the footprint, and rerouting the critical USB data lines. 
+
+Halfway through the layout rework, KiCad crashed unexpectedly. I lost about 30 minutes of work because of the crash. Luckily, I was able to recover most of it from the automatic backups in my project folder. I restored the project, re-completed the PCB modifications, and fixed the DRC clearance issues again.
+
+![USB footprint rework](design-images/32_usb_shroud_fail.png)
+![KiCad recovery folder](design-images/33_kicad_recovery.png)
+![PCB layout state](design-images/20_pcb_layout.png)
+
+Total time spent: 4 hours
+
+# April 02, 2026: Simplification, Slack Feedback, & Manufacturing Prep
+
+After reviewing the complex metal-shrouded connector, I realized it added unnecessary complexity and routing congestion. I decided to revert to the original, simpler USB Type-C design. 
+
+I posted the design on the Hack Club Slack to get feedback. Someone pointed out that the RGB LED was wired to GND instead of 3.3V, so I corrected the schematic and rerouted that section. I then exported our production-ready Gerber files, drill files, and component placement coordinates (CPL). I did a final check using the 3D viewer to make sure component clearances and alignments looked correct.
+
+![Reverted USB layout](design-images/34_original_usb_layout.png)
+![LED wiring fix](design-images/35_led_wiring_fix.png)
+![Generated gerbers list](design-images/36_manufacturing_files.png)
+![3D model check](design-images/19_3d_front.png)
+
+Total time spent: 3.5 hours
+
+# April 10, 2026: Firmware Build System & USB Setup
+
+With the hardware finalized, I transitioned to software. I set up the firmware build environment using CMake and the `arm-none-eabi-gcc` toolchain. I configured the build settings for the ARM Cortex-M0 core and defined the compiler flags and linker script mappings.
+
+Once the build system compiled successfully, I configured the STM32 HAL USB device stack. I defined the basic USB descriptors, set up endpoint configurations, and confirmed that the device successfully enumerated on my PC as an unrecognized USB device.
+
+![CMake setup](design-images/37_cmake_setup.png)
+![USB stack setup](design-images/38_usb_device_stack.png)
+
+Total time spent: 2.5 hours
+
+# April 15, 2026: Implementing FIDO2 & Command Parsing
+
+I began implementing the FIDO2 protocol layer. I set up the USB Human Interface Device (HID) descriptors so the key could communicate with the host operating system. I also implemented key derivation logic utilizing HKDF for security.
+
+Finally, I wrote the basic packet parsing state machine. This extracts incoming FIDO2 command packets from raw USB HID reports and routes them to the appropriate handler functions. The key can now parse packets and prepare response packets to send back to the computer.
+
+![FIDO2 HKDF implementation](design-images/04_hkdf_code.png)
+![Command parsing code](design-images/40_command_parsing_code.png)
+
+Total time spent: 1.25 hours
