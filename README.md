@@ -1,67 +1,50 @@
 # Knox Key
 
-A USB-C FIDO2 security key. This repo holds the KiCad 9 hardware design (schematic, PCB, manufacturing outputs) and the authenticator firmware.
+This is a custom USB-C FIDO2 security key. The repository contains the KiCad 9 hardware files (schematics, PCB layout, fab outputs) and the authenticator firmware. 
 
-The board pairs an STM32L433 with an ATECC608B secure element and exposes a single USB Type-C port. It started life as the "kryptonite" STM32F072 design and was reworked onto the L433.
+The hardware pairs an STM32L433 microcontroller with an ATECC608B secure element. The project started out as an STM32F072 design (originally named "kryptonite") but was later reworked to use the L433.
 
-## Hardware
+## Hardware Details
+* **MCU:** STM32L433CB (LQFP-48) with an 8 MHz crystal and internal USB PHY.
+* **Crypto:** ATECC608B secure element on I2C (PB6/PB7) for hardware TRNG.
+* **Port:** USB Type-C running USB 2.0 full speed.
+* **Feedback:** Single RGB LED. Green is success, red is error, blue/yellow indicates waiting for user presence.
+* **Button:** Tactile button for user presence verification (supports single, double, and long presses).
+* **Power:** USB bus-powered via a 3.3V MCP1700 LDO.
+* **PCB:** 2-layer layout.
 
-- MCU: STM32L433CB (LQFP-48), 8 MHz crystal, internal USB full-speed PHY
-- Secure element: ATECC608B on I2C (PB6/PB7), used as the hardware RNG
-- Connector: USB Type-C, USB 2.0 full speed
-- Status LED: RGB — green for success, red for error, blue/yellow while waiting
-- User presence: tactile button (single, double, and long press)
-- Power: USB bus powered, 3.3 V from an MCP1700 LDO
-- 2-layer board
-
-## Opening the project
-
-Open `Knox Key Kicad.kicad_pro` in KiCad 9. Run ERC and DRC before exporting anything for manufacturing.
-
-The interactive BOM (`bom/ibom.html`) opens in a browser and is handy for hand-assembly.
+## Working with KiCad
+Open `Knox Key Kicad.kicad_pro` in KiCad 9. Make sure to run ERC and DRC before exporting manufacturing outputs. If you are hand-assembling the board, open `bom/ibom.html` in a web browser for the interactive BOM.
 
 ## Firmware
+The firmware is in `firmware/knoxkey/` and implements a FIDO2 / CTAP2 authenticator. Random numbers are pulled from the ATECC608B over I2C, while credential wrapping uses software AES. User presence is verified via the hardware button.
 
-`firmware/knoxkey/` contains a FIDO2 / CTAP2 authenticator. Random numbers come from the ATECC608B over I2C; AES is done in software for wrapping stored credentials. User presence is the front button, with debouncing and single/double/long press handling. The RGB LED mirrors the FIDO state.
-
-Build the STM32L433 target with CMake and `arm-none-eabi-gcc`:
-
+To build the target for the STM32L433:
 ```bash
 cd firmware/knoxkey
 cmake -B build/stm32l433-release -S . --preset default -DBUILD_TARGET=stm32l433
 cmake --build build/stm32l433-release -j 8
 ```
+Binaries (`.elf`, `.hex`, `.bin`) will compile into `build/stm32l433-release/targets/stm32l433/`. Flash them using an ST-Link or via USB DFU mode.
 
-The `.elf`, `.hex`, and `.bin` land in `build/stm32l433-release/targets/stm32l433/`. Flash over ST-Link or USB DFU.
+## Manufacturing & Ordering
+All files needed to manufacture the board are inside `manufacturing/`:
+* `gerbers/` and `knox-key-gerbers.zip` — Bare-board fabrication files.
+* `bom.csv` — Bill of Materials (with LCSC part numbers).
+* `positions.csv` — Pick-and-place component coordinates (CPL).
+* `designators.csv` — Reference designator mappings.
+* `netlist.ipc` — IPC-D-356 netlist.
 
-## Manufacturing files
-
-All outputs required for board fabrication and assembly are located in the `manufacturing/` directory:
-
-- `gerbers/` and `knox-key-gerbers.zip` — Bare-board fabrication files.
-- `bom.csv` — Bill of Materials with LCSC part numbers.
-- `positions.csv` — Pick-and-place component coordinates.
-- `designators.csv` — List of designators mapped to components.
-- `netlist.ipc` — IPC-D-356 netlist file.
-
-For a JLCPCB order, upload `knox-key-gerbers.zip` for PCB fabrication, then use `bom.csv` and `positions.csv` for SMT assembly. Turn on the stencil option if you want a paste stencil.
-
-Regenerate these from KiCad after any layout change — the committed copies are only as current as the last export.
+For JLCPCB: Upload `knox-key-gerbers.zip` for the PCB, and use `bom.csv` and `positions.csv` for SMT assembly. Add a solder paste stencil to your order if you plan to solder manually. Don't forget to regenerate these from KiCad if you modify the layout!
 
 ## Renders
-
 ![3D front](design-images/3D-Front.png)
-
 ![3D back](design-images/3D-Back.png)
-
 ![PCB layout](design-images/PCB.png)
-
 ![Schematic](design-images/schematic.png)
 
-## Security note
-
-This is a hobbyist design, not an audited product. The ATECC608B ships unprovisioned — you have to load your own keys. Don't rely on it for anything serious without reviewing the firmware and provisioning the secure element yourself.
+## Security Warning
+This is a hobbyist project and has not undergone any formal security audit. The ATECC608B chips ship unprovisioned, meaning you must load your own keys onto the secure element. Do not use this for production environments without reviewing the firmware and provisioning process yourself.
 
 ## License
-
-GPLv3. See `LICENSE`.
+GPLv3. See `LICENSE` for details.
