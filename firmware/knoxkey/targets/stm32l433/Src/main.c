@@ -147,11 +147,6 @@ void SystemClock_Config(void) {
 	}
 }
 
-/**
- * @brief TIM2 Initialization Function — used for LED PWM on PA0 (TIM2_CH1)
- */
-
-
 I2C_HandleTypeDef hi2c1;
 
 static void MX_I2C1_Init(void) {
@@ -199,7 +194,6 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* hi2c) {
 static void MX_GPIO_Init(void) {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-	/* GPIO Ports Clock Enable */
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_GPIOH_CLK_ENABLE();
@@ -228,8 +222,6 @@ static void MX_GPIO_Init(void) {
  */
 void Error_Handler(void) {
 	__disable_irq();
-	/* Fast-blink LED to signal error */
-	/* Since interrupts are disabled, just toggle manually */
 	while (1) {
 	}
 }
@@ -257,7 +249,6 @@ void Button_Update(void) {
             uint32_t duration = tick - button_press_start;
             
             if (duration >= 1000) {
-                // Long press
                 CurrentButtonEvent = BUTTON_EVENT_LONG_PRESS;
                 click_count = 0;
             } else {

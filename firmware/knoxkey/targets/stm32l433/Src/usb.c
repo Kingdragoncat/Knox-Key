@@ -19,7 +19,7 @@ static_assert(sizeof(ctaphid_packet_t) == CFG_TUD_ENDPOINT0_SIZE, "invalid sizeo
 TU_FIFO_DEF(app_hid_report_send_queue, KNOXKEY_HID_SEND_QUEUE_DEPTH, ctaphid_packet_t, false);
 
 void app_hid_task(void) {
-	tud_task(); /* tinyusb device task */
+	tud_task();
 	app_hid_report_send_queue_send_one_if_possible();
 }
 

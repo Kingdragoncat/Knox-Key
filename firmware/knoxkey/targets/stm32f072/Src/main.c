@@ -69,17 +69,12 @@ void Status_LED_Set_Mode(Status_LED_Mode mode) {
  */
 int main(void) {
 
-	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 	HAL_Init();
-
-	/* Configure the system clock */
 	SystemClock_Config();
-
-	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
 	MX_TIM3_Init();
 
-	/* Infinite loop — app_run never returns */
+	/* app_run never returns */
 	app_run();
 }
 
@@ -173,7 +168,6 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim) {
 static void MX_GPIO_Init(void) {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-	/* GPIO Ports Clock Enable */
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_GPIOF_CLK_ENABLE();
@@ -202,8 +196,6 @@ static void MX_GPIO_Init(void) {
  */
 void Error_Handler(void) {
 	__disable_irq();
-	/* Fast-blink LED to signal error */
-	/* Since interrupts are disabled, just toggle manually */
 	while (1) {
 	}
 }
